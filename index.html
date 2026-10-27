@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Planejamento · Início</title>
+  <link rel="stylesheet" href="style.css?v=6">
+</head>
+<body>
+<header class="topo">
+  <div class="topo-conteudo">
+    <div class="marca-bloco">
+      <span class="marca-icone" aria-hidden="true"></span>
+      <div>
+        <h1>Planejamento</h1>
+        <p class="subtitulo">Nivelamento e acompanhamento diário</p>
+      </div>
+    </div>
+    <span id="sync-status" class="chip-status">Verificando…</span>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <h2>O que você quer fazer hoje?</h2>
+    <p>Escolha uma das ferramentas abaixo. Quem atualiza as planilhas escolhe a pasta uma vez por dia; todos os outros recebem os dados da nuvem automaticamente.</p>
+  </section>
+
+  <section class="painel">
+    <div class="linha-campos">
+      <label class="arquivo" id="card-pasta">
+        <span class="arquivo-info">
+          <span class="arquivo-nome">Selecionar pasta das planilhas</span>
+          <span class="arquivo-estado" data-estado>Quem atualiza escolhe a pasta; os demais recebem da nuvem sozinhos</span>
+        </span>
+        <input type="file" id="seletor-pasta-home" webkitdirectory directory multiple>
+      </label>
+      <label class="arquivo" id="card-arquivos">
+        <span class="arquivo-info">
+          <span class="arquivo-nome">Ou escolher os arquivos</span>
+          <span class="arquivo-estado">diario, tarefas, ordens e atual (.xlsx)</span>
+        </span>
+        <input type="file" id="seletor-arquivos-home" multiple accept=".xlsx,.xls,.xlsm,.csv">
+      </label>
+      <label>Sala (igual para todos)
+        <input type="text" id="sala-home" placeholder="ex.: caldeiraria-x7k2">
+      </label>
+      <label>Seu nome
+        <input type="text" id="nome-home" placeholder="quem atualiza">
+      </label>
+      <button type="button" class="botao" id="limpar-pasta" hidden>Limpar deste computador</button>
+    </div>
+    <p id="aviso" class="aviso" role="alert" hidden></p>
+  </section>
+
+  <section class="cartoes-home">
+    <a class="cartao-home" href="nivelamento.html">
+      <span class="cartao-icone" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/></svg>
+      </span>
+      <span class="cartao-texto">
+        <strong>Nivelamento</strong>
+        <span>Ordens e tarefas do diário, duplicadas, TAGs repetidas, ocupação por centro e exportação para Excel.</span>
+      </span>
+      <span class="cartao-seta" aria-hidden="true">Abrir →</span>
+    </a>
+
+    <a class="cartao-home destaque" href="acompanhamento.html">
+      <span class="cartao-icone" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M9 11l3 3 8-8M20 12v7a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h11"/></svg>
+      </span>
+      <span class="cartao-texto">
+        <strong>Acompanhamento diário</strong>
+        <span>Veja a planilha atual por ordem, área ou centro, registre justificativa e motivo e marque CONFIRMADO, em conjunto com o seu colega.</span>
+      </span>
+      <span class="cartao-seta" aria-hidden="true">Abrir →</span>
+    </a>
+
+    <a class="cartao-home" href="carteira.html">
+      <span class="cartao-icone" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M3 7h18v13H3zM8 7V4h8v3M3 13h18"/></svg>
+      </span>
+      <span class="cartao-texto">
+        <strong>Gestão de carteira</strong>
+        <span>Ordens e operações em aberto da carteira (áreas 014, 018 e 019 e seus CTs). Acesso com chave e senha.</span>
+      </span>
+      <span class="cartao-seta" aria-hidden="true">Entrar →</span>
+    </a>
+
+    <section class="cartoes-home">
+    <a class="cartao-home" href="montar.html">
+      <span class="cartao-icone" aria-hidden="true">
+        <svg viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7m4 7H2"/></svg>
+      </span>
+      <span class="cartao-texto">
+        <strong>Montar Nivelamento</strong>
+        <span>Ordens e tarefas do diário, duplicadas, TAGs repetidas, ocupação por centro e exportação para Excel.</span>
+      </span>
+      <span class="cartao-seta" aria-hidden="true">Abrir →</span>
+    </a>
+
+  </section>
+</main>
+
+<script src="xlsx.full.min.js"></script>
+<script>
+  if (typeof XLSX === 'undefined') {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>');
+  }
+</script>
+<script src="script.js?v=9"></script>
+</body>
+</html>

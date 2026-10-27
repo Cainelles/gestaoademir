@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Montar nivelamento</title>
+  <link rel="stylesheet" href="style.css?v=6">
+  <style>
+    textarea{font:inherit;padding:8px 10px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--txt);width:100%;min-height:70px}
+    input[type=checkbox]{width:18px;height:18px;accent-color:var(--pri)}
+    .oc-in{width:90px;padding:4px 6px}
+    .oc-cel{display:flex;align-items:center;gap:8px;min-width:200px}
+    .oc-barra{flex:1;height:14px;border-radius:8px;background:rgba(128,128,128,.25);overflow:hidden}
+    .oc-fill{height:100%;width:0;background:#2e9d5b;transition:width .25s}.oc-fill.estouro{background:#d64545}
+    .oc-pct{font-weight:600;min-width:56px}.oc-saldo.ok{color:#2e9d5b}.oc-saldo.over{color:#d64545;font-weight:600}
+    .oc-total td{font-weight:700}
+    .campo-largo{flex:1;min-width:260px}
+    .tag-grupo summary .botao{margin-left:auto}
+    .oc-add{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .gr-titulo{margin:18px 0 6px}
+    .gr{padding-top:24px}
+    .gr-area{position:relative;height:260px;display:flex;align-items:flex-end;gap:10px;border-bottom:2px solid var(--bd)}
+    .gr-col{flex:1;min-width:42px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center}
+    .gr-val{font-size:12px;font-weight:600;margin-bottom:2px}
+    .gr-bar{width:70%;max-width:60px;background:#2e9d5b;border-radius:6px 6px 0 0;transition:height .7s cubic-bezier(.2,.8,.2,1)}
+    .gr-bar.estouro{background:#d64545}
+    .gr-linha{position:absolute;left:0;right:0;border-top:2px dashed #d64545;pointer-events:none;z-index:2}
+    .gr-linha span{position:absolute;right:0;top:-18px;font-size:12px;font-weight:700;color:#d64545}
+    .gr-rot{display:flex;gap:10px;margin-top:6px}
+    .gr-rot span{flex:1;min-width:42px;text-align:center;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  </style>
+</head>
+<body>
+<header class="topo">
+  <div class="topo-conteudo">
+    <div class="marca-bloco">
+      <span class="marca-icone" aria-hidden="true"></span>
+      <div>
+        <h1>Montar nivelamento</h1>
+        <p class="subtitulo" id="fonte">Escolha as ordens e as tarefas que quer nivelar</p>
+      </div>
+    </div>
+    <div class="topo-direita">
+      <span class="chip" id="sync">Sem sala (só você)</span>
+      <button type="button" class="voltar" id="sala-btn">Entrar/criar sala</button>
+      <a class="voltar" href="nivelamento.html">Nivelamento</a>
+      <a class="voltar" href="index.html">Início</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="painel">
+    <div class="painel-cab"><h2>1. Escolha as ordens</h2>
+      <p class="ajuda">Cole uma ou várias OMs (uma por linha, ou separadas por vírgula/espaço). Os dados vêm das planilhas já carregadas.</p></div>
+    <div class="filtros">
+      <label class="campo-largo">OMs <textarea id="oms" placeholder="ex.: 4001234&#10;4001235"></textarea></label>
+      <div class="acoes">
+        <button type="button" class="botao" id="add-oms">Adicionar ordens</button>
+        <button type="button" class="botao" id="limpar-tudo">Limpar tudo</button>
+      </div>
+    </div>
+    <p id="aviso" class="aviso" role="alert" hidden></p>
+  </section>
+
+  <section id="inicio" class="inicio">
+    <p class="inicio-titulo">Nenhuma ordem adicionada</p>
+    <p>Se aparecer erro de dados, carregue a pasta na página inicial primeiro.</p>
+  </section>
+
+  <div id="resultado" hidden>
+    <section class="painel">
+      <div class="painel-cab"><h2>2. Selecione as tarefas</h2>
+        <p class="ajuda">Marque as tarefas que vão para o nivelamento. A ocupação é calculada na hora.</p></div>
+      <div class="filtros">
+        <label>Centro de trabalho <select id="f-ct"></select></label>
+        <label>Busca <input type="search" id="f-busca" placeholder="Texto da tarefa"></label>
+        <label class="check"><input type="checkbox" id="f-pend"> Esconder confirmadas</label>
+        <div class="acoes">
+          <button type="button" class="botao" id="marcar-vis">Marcar todas visíveis</button>
+          <button type="button" class="botao" id="desmarcar-vis">Desmarcar visíveis</button>
+        </div>
+      </div>
+      <div id="ordens-lista"></div>
+    </section>
+
+    <section class="painel">
+      <div class="painel-cab"><h2>3. Ocupação da semana</h2><span class="badge" id="ocup-badge"></span></div>
+      <div id="ocup"></div>
+    </section>
+
+    <section class="painel">
+      <div class="painel-cab"><h2>4. Nivelamento montado</h2>
+        <div class="acoes">
+          <button type="button" class="botao" id="copiar">Copiar OMs</button>
+          <button type="button" class="botao" id="excel">Gerar Excel</button>
+          <button type="button" class="botao" id="diario" title="Mesmo formato do diario.xlsx">Baixar como diario.xlsx</button>
+        </div>
+      </div>
+      <div id="montado"></div>
+    </section>
+  </div>
+</main>
+
+<script src="xlsx.full.min.js"></script>
+<script>
+  if (typeof XLSX === 'undefined') {
+    document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"><\/script>');
+  }
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-app-compat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/9.23.0/firebase-database-compat.min.js"></script>
+<script src="script.js?v=9"></script>
+<script src="montar.js?v=2"></script>
+</body>
+</html>
