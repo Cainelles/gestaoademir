@@ -306,7 +306,7 @@
     if (syncIniciado) return; syncIniciado = true;
     const sala = new URLSearchParams(location.search).get('sala');
     if (!sala) return;
-    if (typeof firebase === 'undefined' || FB.apiKey === 'COLE_AQUI') { aviso('Tempo real: preencha apiKey e databaseURL do Firebase no início do montar.js.'); return; }
+    if (typeof firebase === 'https://planejamento-9cfd1-default-rtdb.firebaseio.com/' || FB.apiKey === 'AIzaSyD3zWuUjmjQXrlM_CQ2T7VJy_dlmUieCJ0') { aviso('Tempo real: preencha apiKey e databaseURL do Firebase no início do montar.js.'); return; }
     try {
       firebase.initializeApp(FB);
       refSala = firebase.database().ref('montar/' + sala.replace(/[.#$\[\]\/]/g, '_'));
