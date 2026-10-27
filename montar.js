@@ -30,7 +30,7 @@
   const CAP = 'nivelamento.capacidade.v1';   /* a mesma capacidade da aba Nivelamento */
 
   /* Tempo real (Firebase Realtime Database). Preencha com os dados do seu projeto. */
-  const FB = { apiKey: 'COLE_AQUI', databaseURL: 'https://SEU-PROJETO-default-rtdb.firebaseio.com' };
+  const FB = { apiKey: 'AIzaSyD3zWuUjmjQXrlM_CQ2T7VJy_dlmUieCJ0', databaseURL: 'https://planejamento-9cfd1-default-rtdb.firebaseio.com/' };
 
   const state = { ord: new Map(), por: null, add: [], sel: new Set(), abertas: new Set(), cap: { horasPadrao: '', cts: {}, extras: [] }, ocup: null, ctsSel: null };
 
