@@ -303,23 +303,71 @@
   }
 
   function iniciarSync() {
-    if (syncIniciado) return; syncIniciado = true;
-    const sala = new URLSearchParams(location.search).get('sala');
-    if (!sala) return;
-    if (typeof firebase === 'https://planejamento-9cfd1-default-rtdb.firebaseio.com/' || FB.apiKey === 'AIzaSyD3zWuUjmjQXrlM_CQ2T7VJy_dlmUieCJ0') { aviso('Tempo real: preencha apiKey e databaseURL do Firebase no início do montar.js.'); return; }
-    try {
+  const sala = new URLSearchParams(location.search).get('sala');
+
+  if (!sala) {
+    $('sync').textContent = 'Sem sala (só você)';
+    return;
+  }
+
+  if (syncIniciado) return;
+  syncIniciado = true;
+
+  if (typeof firebase === 'undefined' ||
+      !firebase.database ||
+      !firebase.initializeApp) {
+    syncIniciado = false;
+    $('sync').textContent = 'Firebase indisponível';
+    aviso('Não foi possível carregar o Firebase. Verifique os scripts no HTML.');
+    return;
+  }
+
+  if (!FB.apiKey || !FB.databaseURL) {
+    syncIniciado = false;
+    $('sync').textContent = 'Firebase não configurado';
+    aviso('Confira apiKey e databaseURL na configuração do Firebase.');
+    return;
+  }
+
+  try {
+    // Reutiliza a aplicação se o script.js já a inicializou.
+    if (firebase.apps.length) {
+      firebase.app();
+    } else {
       firebase.initializeApp(FB);
-      refSala = firebase.database().ref('montar/' + sala.replace(/[.#$\[\]\/]/g, '_'));
-    } catch (e) { aviso('Não consegui conectar ao Firebase: ' + e.message); return; }
+    }
+
+    const codigoSala = sala.replace(/[.#$\[\]\/]/g, '_');
+    refSala = firebase.database().ref('montar/' + codigoSala);
+
     $('sync').textContent = `Sala: ${sala} · conectando…`;
+
     refSala.on('value', (snap) => {
       const v = snap.val();
+
       $('sync').textContent = `Sala: ${sala} · ao vivo`;
-      if (!v) { publicar(); return; }          /* sala vazia: sobe o que você já tem */
+
+      if (!v) {
+        publicar();
+        return;
+      }
+
       if (v.json === ultimo) return;
-      ultimo = v.json; aplicar(v.json);
-    }, (err) => aviso('Tempo real: ' + err.message));
+
+      ultimo = v.json;
+      aplicar(v.json);
+    }, (err) => {
+      $('sync').textContent = `Sala: ${sala} · erro`;
+      aviso('Erro na sincronização: ' + err.message);
+    });
+
+  } catch (e) {
+    syncIniciado = false;
+    refSala = null;
+    $('sync').textContent = 'Falha na conexão';
+    aviso('Não consegui conectar ao Firebase: ' + e.message);
   }
+}
 
   /* ---------- Exportar ---------- */
   async function copiar() {
