@@ -324,7 +324,7 @@
         planejar:  !!om && gpmOk && o.cod !== null && o.cod !== '1' && o.cod !== '2',
         aent:      !!om && temStatus(o.st, 'CONF') && !temStatus(o.st, 'AENT'),
         imediatas: !!om && o.cod === '2',
-        /*smpmi:     !!om && gpmOk && (o.cod === '1' || o.cod === '2') && temStatus(o.st, 'LIB') && !temStatus(o.st, 'MPMI'),*/
+        smpmi:     !!om && gpmOk && (o.cod === '1' || o.cod === '2') && temStatus(o.st, 'LIB') && !temStatus(o.st, 'MPMI'),
         cnpa:      !!o.fCnpa
       };
     });
