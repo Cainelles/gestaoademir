@@ -44,9 +44,9 @@
     { id: 'imediatas', grupo: 'ordens', titulo: 'Ordens imediatas', unid: 'ordens',
       desc: 'Só ordens com CPO (código de planejamento) igual a 2.',
       icone: 'M13 2L4 14h7l-1 8 9-12h-7z' },
-    { id: 'smpmi', grupo: 'ordens', titulo: 'Ordens s/MPMI', unid: 'ordens',
+    /*{ id: 'smpmi', grupo: 'ordens', titulo: 'Ordens s/MPMI', unid: 'ordens',
       desc: 'Ordens LIB, sem MPMI, com CPO 1 ou 2 e GPM CAL, TQC, COM, MOV ou IEQ.',
-      icone: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM5.6 5.6l12.8 12.8' },
+      icone: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM5.6 5.6l12.8 12.8' },*/
     { id: 'cnpa', grupo: 'ordens', titulo: 'CNPA', unid: 'ordens',
       desc: 'Total de CNPA na carteira, quantas têm IMPD e, em cada ordem, só as tarefas que não estão CONF.',
       icone: 'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 7v5l3 2' }
